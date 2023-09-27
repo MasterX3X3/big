@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Big Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Big Data by Kozlov Mikhail</h1>
+    </header>
+    <div class="container">
+        <div class="code-block">
+            <h2>3 Задание</h2>
+            <pre>
+text = input("Введите текст: ")
+words = text.split()
+max_length = 0
+max_word_index = -1
+this_word=""
+for i, word in enumerate(words,1):
+    word = word.strip(".,!?;:'\"()[]{}")
+    word_length = len(word)
+    if word_length > max_length:
+        max_length = word_length
+        max_word_index = i
+        this_word=word
+if max_word_index != -1:
+    print(f"Первое самое длинное слово находится под номером {max_word_index}: {this_word}")
+else:
+    print("Текст не содержит слов")
+            </pre>
+        </div>
+        <div class="code-block">
+            <h2>4 Задание</h2>
+            <pre>
+# Создаем словарь с событиями и интенсивностью шума
+noise_events = {
+    "концерт": 110,
+    "библиотека": 30,
+    "строительство": 75,
+    "тишина": 20
+}
+
+# Функция для определения влияния шума на здоровье
+def analyze_noise_intensity(event, intensity):
+    if intensity < 35:
+        return f"{event} - не вреден для здоровья."
+    elif 35 <= intensity < 70:
+        return f"{event} - негативное влияние на нервную систему человека."
+    elif 70 <= intensity < 85:
+        return f"{event} - ухудшение слуха, головные боли."
+    elif 85 <= intensity < 130:
+        return f"{event} - серьезный вред здоровью."
+    else:
+        return f"{event} - угроза жизни."
+
+# Анализируем каждое событие и выводим результат
+for event, intensity in noise_events.items():
+    result = analyze_noise_intensity(event, intensity)
+    print(result)
+            </pre>
+        </div>
+        <div class="code-block">
+            <h2>4 Задание (JSON)</h2>
+            <pre>
+import json
+
+# Загрузите данные из JSON-файла
+with open('data.json', 'r') as file:
+    data = json.load(file)
+
+# Создайте словарь для отслеживания количества действий каждого клиента
+client_actions = {}
+
+# Пройдите по каждому событию
+for event in data['events_data']:
+    client_id = event['client_id']
+    
+    # Если клиент уже есть в словаре, увеличьте счетчик действий на 1
+    if client_id in client_actions:
+        client_actions[client_id] += 1
+    else:
+        # Если клиента нет в словаре, добавьте его с одним действием
+        client_actions[client_id] = 1
+
+# Подсчитайте количество клиентов с одним действием
+count_clients_with_one_action = sum(1 for count in client_actions.values() if count == 1)
+
+print(f"Количество клиентов с одним действием: {count_clients_with_one_action}")
+            </pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -124,6 +124,86 @@ count_clients_with_one_action = sum(1 for count in client_actions.values() if co
 print(f"Количество клиентов с одним действием: {count_clients_with_one_action}")
             </pre>
         </div>
+        <div class="code-block">
+            <h2>Вычмат K4</h2>
+            <pre>
+import numpy as np
+
+# НАЧАЛЬНЫЕ УСЛОВИЯ
+size_of_matrix = 2
+A = [11, -0.5, -0.5, 11]
+A_minus1 = [44 / 483, 2 / 483, 2 / 483, 44 / 483]
+iter_count = 3
+after_comma_count = 3
+eps_of_the_equation = 0.001
+
+# КОНЕЦ НАЧАЛЬНЫХ УСЛОВИЙ
+A = np.array(A).reshape([size_of_matrix, size_of_matrix])
+A_minus1 = np.array(A_minus1).reshape([size_of_matrix, size_of_matrix])
+
+print("Проверка обратной матрицы (A * A^-1):")
+for i in np.matmul(A, A_minus1):
+    [print(round(j, after_comma_count - 1), end='\t') for j in i]
+    print()
+print('Сверху должно быть что-то, похожее на единичную матрицу\n')
+
+# eps_0 = 1e-2
+
+print("Вычисление максимального собственного значения для A:\nШаг 0:")
+
+y = np.array([1] + [0] * (size_of_matrix - 1))
+d = round(np.linalg.norm(y), after_comma_count)
+d_last = d
+w = [round(i, after_comma_count) for i in y / d]
+
+eps = 999999
+
+print(f"| y0={y}\n| d0={d}\n+ w0={w}")
+
+for i in range(1, iter_count + 1):
+    print(f'\nШаг {i}:')
+    d_last = d
+
+    y = [round(i, after_comma_count) for i in np.dot(A, w)]
+    d = round(np.linalg.norm(y), after_comma_count)
+    w = [round(i, after_comma_count) for i in (y / d)]
+    eps = round(abs(d - d_last), after_comma_count)
+
+    print(f"| y{i}={y}\n| d{i}={d}\n| w{i}={w}\n+ eps{i}={eps}")
+
+print(f"\nМаксимальный собственный вектор матрицы A: {d=} с погрешностью {eps=}\n\n")
+d_A = d
+
+print("Вычисление максимального собственного значения для A^-1:\nШаг 0:")
+
+y = np.array([1] + [0] * (size_of_matrix - 1))
+d = round(np.linalg.norm(y), after_comma_count)
+d_last = d
+w = [round(i, after_comma_count) for i in y / d]
+
+eps = 999999
+
+print(f"| y0={y}\n| d0={d}\n+ w0={w}")
+
+for i in range(1, iter_count + 1):
+    print(f'\nШаг {i}:')
+    d_last = d
+
+    y = [round(i, after_comma_count) for i in np.dot(A_minus1, w)]
+    d = round(np.linalg.norm(y), after_comma_count)
+    w = [round(i, after_comma_count) for i in (y / d)]
+    eps = round(abs(d - d_last), after_comma_count)
+
+    print(f"| y{i}={y}\n| d{i}={d}\n| w{i}={w}\n+ eps{i}={eps}")
+
+print(f"\nМаксимальный собственный вектор матрицы A^-1: {d=} с погрешностью {eps=}\n")
+
+print(f'Минимальное собственное значение для матрицы A: d={round(1 / d,after_comma_count)}\n')
+print(f'C = {round(abs(d_A / (1 / d)), after_comma_count)}')
+print(f'eps_sol = {abs(d_A / (1 / d)) * eps_of_the_equation}')
+
+            </pre>
+        </div>
     </div>
 </body>
 </html>

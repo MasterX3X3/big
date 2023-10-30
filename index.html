@@ -204,6 +204,108 @@ print(f'eps_sol = {abs(d_A / (1 / d)) * eps_of_the_equation}')
 
             </pre>
         </div>
+        <div class="code-block">
+            <h2>3 Задание</h2>
+            <pre>
+# Заданное уравнение
+def equation(x, S):
+    return x**3 - 0.1*S*x**2 + 0.01*S**2*x - 0.001*S**3
+
+# Производная уравнения
+def derivative(x, S):
+    return 3*x**2 - 0.2*S*x + 0.01*S**2
+
+def calculate_lambda(S):
+    return 1 / (27 - 0.6 * S + 0.01 * S**2)
+
+# Метод половинного деления (бисекции)
+def bisection_method(S, a, b, epsilon):
+    iteration = 0
+    print("\n\n\nМетод половинного деления")
+    while (b - a) / 2 > epsilon:
+        iteration += 1
+        mid = (a + b) / 2
+        if equation(mid, S) == 0:
+            return mid
+        elif equation(a, S) * equation(mid, S) < 0:
+            b = mid
+        else:
+            a = mid
+        print(f"Iтерация {iteration}: x = {mid:.6f}, f(x) = {equation(mid, S):.6f}")
+    return (a + b) / 2
+
+# Метод итераций с выбором параметра
+def iteration_method(S, x0, epsilon):
+    iteration = 0
+    print("\n\n\nМетод итераций с выбором параметра")
+    x = x0
+    while abs(equation(x, S)) > epsilon:
+        iteration += 1
+        lambda_value = calculate_lambda(S)
+        x = x - lambda_value * equation(x, S)
+        print(f"Iтерация {iteration}: x = {x:.6f}, f(x) = {equation(x, S):.6f}")
+    return x
+
+# Метод Ньютона
+def newton_method(S, x0, epsilon):
+    iteration = 0
+    print("\n\n\nМетод Ньютона")
+    x = x0
+    while abs(equation(x, S)) > epsilon:
+        iteration += 1
+        x = x - equation(x, S) / derivative(x, S)
+        print(f"Iтерация {iteration}: x = {x:.6f}, f(x) = {equation(x, S):.6f}")
+    return x
+
+# Метод хорд
+def chord_method(S, a, b, epsilon):
+    iteration = 0
+    print("\n\n\nМетод хорд")
+    while abs(equation(b, S)) > epsilon:
+        iteration += 1
+        c = (a * equation(b, S) - b * equation(a, S)) / (equation(b, S) - equation(a, S))
+        a = b
+        b = c
+        print(f"Iтерация {iteration}: x = {c:.6f}, f(x) = {equation(c, S):.6f}")
+    return b
+
+# Метод хорд и касательных (метод Ньютона с выбором начального приближения)
+def hybrid_method(S, a, b, epsilon):
+    iteration = 0
+    print("\n\n\nМетод хорд и касательных")
+    x = a if equation(a, S) * derivative(a, S) > 0 else b
+    while abs(equation(x, S)) > epsilon:
+        iteration += 1
+        if equation(x, S) * derivative(x, S) > 0:
+            x = x - equation(x, S) / derivative(x, S)
+        else:
+            x = (a * equation(b, S) - b * equation(a, S)) / (equation(b, S) - equation(a, S))
+        a = b
+        b = x
+        print(f"Iтерация {iteration}: x = {x:.6f}, f(x) = {equation(x, S):.6f}")
+    return x
+
+S = 11  # Значение S
+a = 0  # Левая граница отрезка
+b = 3  # Правая граница отрезка
+epsilon = 0.0001
+lambda_x0 = 0.2 * S / 3
+
+# Решение уравнения с использованием различных методов
+result_bisection = bisection_method(S, a, b, epsilon)
+result_iteration = iteration_method(S, lambda_x0, epsilon)
+result_newton = newton_method(S, 1, epsilon)
+result_chord = chord_method(S, a, b, epsilon)
+result_hybrid = hybrid_method(S, a, b, epsilon)
+
+print("\n\n\nРешение методом половинного деления:", result_bisection)
+print("Решение методом итераций с выбором параметра:", result_iteration)
+print("Решение методом Ньютона:", result_newton)
+print("Решение методом хорд:", result_chord)
+print("Решение методом хорд и касательных:", result_hybrid)
+
+            </pre>
+        </div>
     </div>
 </body>
 </html>
